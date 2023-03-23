@@ -5,5 +5,4 @@ def prog(N,u,r):
         i+=1
     
     
-x = prog(10,0,3)
-print(x)      
+x = prog(10,0,3)     
