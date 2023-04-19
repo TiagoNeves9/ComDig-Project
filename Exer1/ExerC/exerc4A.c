@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <assert.h>
+/* #include <unity.h>
+#include <unity_internals.h> */
 
 int count_ones(int val){
 
@@ -23,7 +26,7 @@ int count_zeros(int val){
 int main(){
     int x = count_ones(4);
     int z = count_zeros(4);
-    printf("# of 1: %d, \n", x);
-    printf("# of 0: %d, \n", z);
+    assert(1 ==  x);
+    assert(2 == z);
 
 }
