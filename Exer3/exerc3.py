@@ -1,19 +1,34 @@
 import numpy as np
+import string
 
-def symbCreation(N, M):
+#################################################################################### Alinea a) e c) #########################################################################################
+
+def symbCreation(N=None, M=None, word=False):
+    ret = []
+    if word==False:
+        # Criar N símbolos, de acordo com a FMP definida, de forma aleatoria 
+        symbols = np.random.choice(list(M.keys()), size=N, p=list(M.values()))
+
+        # Guardar os símbolos num ficheiro
+        with open('symbols.txt', 'w') as f:
+            f.write(' '.join(str(s) for s in symbols))
+    else:
+            
+        for i in range(5):
+            len = np.random.randint(8,13)
+            symbols = np.random.choice(list(M.keys()), size=len, p=list(M.values()))
+            words = ''.join(symbols)
+            ret.append(words)
+        """for i in ret:
+            with open('symbols.txt', 'a') as f:
+                f.write(i)"""    
+        print(ret)    
+            
+        
     
-    # Normalização da FMP
-    #total_prob = sum(M)
-    #fmp_norm = [p/total_prob for p in M]
+z = {'a': 0.3, 'b': 0.5, 'c':0.1, 'd':0.1}
+n = 100
 
-    # Criar um ficheiro com N símbolos, de acordo com a FMP definida
-    symbols = np.random.choice(list(M.keys()), size=N, p=list(M.values()))
+x = symbCreation(n,z,word=True)  
 
-    # Guardar os símbolos num ficheiro
-    with open('symbols.txt', 'w') as f:
-        f.write(' '.join(str(s) for s in symbols))
-
-z = {'a':0.3,'b':0.2,'c':0.1,'d':0.15,'e':0.05,'f':0.1,'g':0.1}
-
-x = symbCreation(32,z)
-print("File created")       
+###########################################################################################################################################################################################            
