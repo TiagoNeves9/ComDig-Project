@@ -27,7 +27,7 @@ def symbCreation(N=None, M=None, word=False):
 
 
 z = {'a': 0.3, 'b': 0.5, 'c': 0.1, 'd': 0.1}
-n = 100
+n = 10000
 
 symbCreation(n, z)
 
