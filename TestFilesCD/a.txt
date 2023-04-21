@@ -1,0 +1,4 @@
+Comunica��o Digital - in�cio de ficheiro de teste.
+1234567890
+The quick brown fox jumps over the lazy dog.
+Comunica��o Digital - final de ficheiro de teste.
