@@ -17,7 +17,7 @@ def histMaker(file):
     bins_ = 100
     entropy = 0
 
-    with open(file, 'r') as f:
+    with open(file, 'r', encoding='utf-8') as f:
         data = f.read()
 
     file_size = len(data)
@@ -38,7 +38,7 @@ def histMaker(file):
 
     print(f"Numero de simbolos: {file_size}")
 
-    plt.title("Histogram")
+    plt.title(f"Histogram {file}")
     plt.hist(plot, bins=bins_)
     plt.show()
 
