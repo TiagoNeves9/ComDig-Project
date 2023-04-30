@@ -10,27 +10,23 @@ import numpy as np
 import Exer2.exerc2 as exerc2
 
 
-#  Ainda nao ta a funcionar, esta com problemas no enconding dos ficheiros
-#  que queremos cifrar
 def makeVernamCypher(plainText, theKey):
-    cyperText = ""
+    cypherText = ""
+    with open(plainText, 'r') as f:
+        data = f.read()
     p = 0
-    key = str(theKey)
+    keyStr = str(theKey)
 
     # if len(data) > len(key):
     # return f"Key given({theKey}) is not enough to cypher the text given({plainText})!"
 
-    for char in plainText:
-        cyperText += chr(ord(char) ^ ord(key[p]))
+    for char in data:
+        cypherText += chr(ord(char) ^ ord(keyStr[p]))
         p += 1
-        if p == len(key):
+        if p == len(keyStr):
             p = 0
+    return cypherText
 
-    return cyperText
-
-
-#x = makeVernamCypher('../TestFilesCD/a.txt', 3333333)
-#print(x)
 
 #   alinea b - chave ser maior ou igual a plain text em termos de tamanho -> garantir isto
 
@@ -49,23 +45,24 @@ def cypherKeyMaker(file, const=False):
         key = np.random.random_integers(3, 3, filesize)
 
     return key
+# ^^^ nao esta a ser utilizada
 
 
 def cypherBigText(file):
     # constKey = cypherKeyMaker(file, True)
     # randomKey = cypherKeyMaker(file)
 
-    constKey = "33333333"
+    constKey = 33333333
     randomKey = "asdwQaks"
 
     constCypherFile = makeVernamCypher(file, constKey)
     randomCypherFile = makeVernamCypher(file, randomKey)
 
-    with open('constFile.txt', 'w') as cw:
+    with open('constFile.txt', 'w', encoding='utf-8') as cw:
         cw.write(''.join(c for c in constCypherFile))
         cw.close()
 
-    with open('randomFile.txt', 'w') as rw:
+    with open('randomFile.txt', 'w', encoding='utf-8') as rw:
         rw.write(''.join(r for r in randomCypherFile))
         rw.close()
 
