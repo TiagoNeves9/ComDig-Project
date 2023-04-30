@@ -9,28 +9,28 @@
 import numpy as np
 import Exer2.exerc2 as exerc2
 
-                                                                                                                #  Ainda nao ta a funcionar, esta com problemas no enconding dos ficheiros
-                                                                                                                #  que queremos cifrar
+
+#  Ainda nao ta a funcionar, esta com problemas no enconding dos ficheiros
+#  que queremos cifrar
 def makeVernamCypher(plainText, theKey):
     cyperText = ""
     p = 0
-    with open(plainText, 'r', encoding='utf-16') as f:
-        data = f.read()
-
     key = str(theKey)
 
-    if len(data) > len(key):
-        return f"Key given({theKey}) is not enough to cypher the text given({plainText})!"
+    # if len(data) > len(key):
+    # return f"Key given({theKey}) is not enough to cypher the text given({plainText})!"
 
-    for char in data:
+    for char in plainText:
         cyperText += chr(ord(char) ^ ord(key[p]))
         p += 1
+        if p == len(key):
+            p = 0
 
     return cyperText
 
 
-# x = makeVernamCypher('cypher.txt', 3333333)
-# print(x)
+#x = makeVernamCypher('../TestFilesCD/a.txt', 3333333)
+#print(x)
 
 #   alinea b - chave ser maior ou igual a plain text em termos de tamanho -> garantir isto
 
@@ -52,22 +52,25 @@ def cypherKeyMaker(file, const=False):
 
 
 def cypherBigText(file):
-    constKey = cypherKeyMaker(file, True)
-    randomKey = cypherKeyMaker(file)
+    # constKey = cypherKeyMaker(file, True)
+    # randomKey = cypherKeyMaker(file)
+
+    constKey = "33333333"
+    randomKey = "asdwQaks"
 
     constCypherFile = makeVernamCypher(file, constKey)
     randomCypherFile = makeVernamCypher(file, randomKey)
 
     with open('constFile.txt', 'w') as cw:
-        cw.write(''.join(constCypherFile))
+        cw.write(''.join(c for c in constCypherFile))
         cw.close()
 
     with open('randomFile.txt', 'w') as rw:
-        rw.write(randomCypherFile)
+        rw.write(''.join(r for r in randomCypherFile))
         rw.close()
 
     exerc2.histMaker('constFile.txt')
     exerc2.histMaker('randomFile.txt')
 
 
-cypherBigText('cypher.txt')
+cypherBigText('../TestFilesCD/alice29.txt')
