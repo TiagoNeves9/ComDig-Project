@@ -1,5 +1,4 @@
 import numpy as np
-import string
 
 
 #################################################################################### Alinea a) e c) #########################################################################################
@@ -12,7 +11,7 @@ def symbCreation(N=None, M=None, word=False):
 
         # Guardar os símbolos num ficheiro
         with open('symbols.txt', 'w') as f:
-            f.write(' '.join(str(s) for s in symbols))
+            f.write(''.join(str(s) for s in symbols))
     else:
 
         for i in range(5):
@@ -27,8 +26,8 @@ def symbCreation(N=None, M=None, word=False):
 
 
 z = {'a': 0.3, 'b': 0.5, 'c': 0.1, 'd': 0.1}
-n = 10000
+n = 10
 
-symbCreation(n, z)
+symbCreation(n, z, True)
 
 ###########################################################################################################################################################################################

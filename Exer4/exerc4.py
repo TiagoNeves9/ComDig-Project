@@ -12,9 +12,11 @@ import Exer2.exerc2 as exerc2
 
 def makeVernamCypher(plainText, theKey):
     cypherText = ""
+    decypherText = ""
     with open(plainText, 'r') as f:
         data = f.read()
     p = 0
+    d = 0
     keyStr = str(theKey)
 
     # if len(data) > len(key):
@@ -25,7 +27,18 @@ def makeVernamCypher(plainText, theKey):
         p += 1
         if p == len(keyStr):
             p = 0
+    for char in cypherText:
+        decypherText += chr(ord(char) ^ ord(keyStr[d]))
+        d += 1
+        if d == len(keyStr):
+            d = 0
+
+    #print('Texto cifrado:', cypherText)
+    #print('Texto decifrado:', decypherText)
     return cypherText
+
+
+#makeVernamCypher('cypher.txt', 3333333)
 
 
 #   alinea b - chave ser maior ou igual a plain text em termos de tamanho -> garantir isto
@@ -45,6 +58,8 @@ def cypherKeyMaker(file, const=False):
         key = np.random.random_integers(3, 3, filesize)
 
     return key
+
+
 # ^^^ nao esta a ser utilizada
 
 
@@ -68,6 +83,6 @@ def cypherBigText(file):
 
     exerc2.histMaker('constFile.txt')
     exerc2.histMaker('randomFile.txt')
-
+    exerc2.histMaker(file)
 
 cypherBigText('../TestFilesCD/alice29.txt')

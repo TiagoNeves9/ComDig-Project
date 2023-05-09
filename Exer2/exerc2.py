@@ -34,7 +34,7 @@ def histMaker(file):
         print(f"Informação Própria: {info} para simbolo {key}")
         entropy = entropyMaker(entropy, info, p)
 
-    print(f"Entropia: {entropy}")
+    print(f"Entropia do ficheiro {file}: {entropy}")
 
     print(f"Numero de simbolos: {file_size}")
 
@@ -43,7 +43,7 @@ def histMaker(file):
     plt.show()
 
 
-#histMaker('texto.txt')
+#histMaker('../TestFilesCD/alice29.txt')
 
 
 ############################################################################

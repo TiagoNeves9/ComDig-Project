@@ -42,7 +42,7 @@ def binarySymmetricChannel(data, BER):
     return output
 
 
-# print(binarySymmetricChannel('01100101011110000110010101101101011100000110110001100101', 1))
+#print(binarySymmetricChannel('01100101011110000110010101101101011100000110110001100101', 0.01))
 
 # alinea b)
 
@@ -67,7 +67,7 @@ def interleaving(text):
     for i in range(idxCol):
         idx = 0
         for j in range(idxRow):
-            newIdx = idx * idxRow + i
+            newIdx = idx * idxCol + i
             if newIdx >= size:
                 intLeavingText += '0'
             else:
@@ -125,10 +125,10 @@ def interleavingBSC(file, ber):
         wf.close()
 
 
-interleavingBSC('txFile.txt', 0.00001)
+#interleavingBSC('txFile.txt', 0.00001)
 
-# print(interleaving("ExemploDeTransmissaoInterleaving"))
-# print(deInterleaving("EonarnxDsolgeemIe0mTina0prstv0lasei0"))
+#print(interleaving("ExemploDeTransmissaoInterleaving"))
+#print(deInterleaving("EonarnxDsolgeemIe0mTina0prstv0lasei0"))
 # print(string_para_binario("python"))
 # print(binario_para_string('011100000111100101110100011010000110111101101110'))
 

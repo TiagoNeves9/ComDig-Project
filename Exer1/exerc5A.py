@@ -1,8 +1,5 @@
-def prog(N,u,r):
+def prog(N, u, r):
     i = 0
     while i < N:
-        print((u+i)*r)
-        i+=1
-    
-    
-x = prog(10,0,3)     
+        print((u + i) * r)
+        i += 1

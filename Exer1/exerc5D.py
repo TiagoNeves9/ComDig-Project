@@ -32,4 +32,4 @@ def hist_maker(file):
     plt.show()
 
 
-hist_maker('ListaPalavrasPT.txt')
+#hist_maker('ListaPalavrasPT.txt')

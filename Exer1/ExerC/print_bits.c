@@ -11,9 +11,20 @@ void print_bits(int val) {
 }
 
 int main(){
+    printf("::     Starting Tests     :::\n");
+    printf("::     Testing with 0     :::\n");
+    print_bits(0);
+    printf("\n");
+    printf("::     Testing with 1     :::\n");
+    print_bits(1);
+    printf("\n");
+    printf("::     Testing with 2     :::\n");
     print_bits(2);
-    print_bits(7);
-    print_bits(-1);
-    print_bits(32);
-    return 0;
+    printf("\n");
+    printf("::     Testing with 10     :::\n");
+    print_bits(10);
+    printf("\n");
+    printf("::     Testing with 255     :::\n");
+    print_bits(255);
+    printf("\n");
 }
