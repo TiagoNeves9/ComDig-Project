@@ -26,25 +26,33 @@ def bscWOErrorsControl(file, ber):
     # print(f'BSC para BER = 10^5', f)
 
     # ii) BER2, após a aplicação de código de repetição (3; 1) sobre o BSC, em modo de correção;
+ def  bscW3_1(file, ber):
+    with open(file, 'r') as fr:
+        data = fr.read()
+    data2 = string_para_binario(data)
+    data3 = binarySymmetricChannel(data2, ber)
+    return repetitionCode31(data3, ber)
+
+
 
     # def bscWErrorControl(file, ber):
 
 
-def repetitionCode31(data):
-    words = ['000', '001', '010', '011', '100', '101', '110', '111']
-    one = rand.choice(words)
-    words.remove(one)
-    zero = rand.choice(words)
-    output = ''
-
+def repetitionCode31(data, ber):
+    codigo = ''
     for bit in data:
         if bit == '1':
-            output += one
+            codigo += '111'
         else:
-            output += zero
+            codigo += '000'
 
-    print("0 equals ->", zero)
-    print("1 equals ->", one)
+    output = ""
+    for bit in codigo:
+        if rand.random() < ber:  # Introduz erro aleatoriamente com base na taxa de erro de bit
+            output += str(1 - int(bit))  # Inverte o bit
+        else:
+            output += bit
+
     print(output)
 
 def detect_errors(data):
