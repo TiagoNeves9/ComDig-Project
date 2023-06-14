@@ -31,10 +31,10 @@ def binarySymmetricChannel(data, BER):
     dataBin = string_para_binario(data)
     outBin = string_para_binario(output)
 
-    errors = 0
-    for i in range(len(dataBin)):
-        if int(dataBin[i], 2) ^ int(outBin[i], 2):
-            errors += 1
-    ber = errors / len(data)
-    print("BER obtida: %f , BER original: %f" % (ber, BER))
+    #errors = 0
+    #for i in range(len(dataBin)):
+    #    if int(dataBin[i], 2) ^ int(outBin[i], 2):
+    #        errors += 1
+    #ber = errors / len(data)
+    #print("BER obtida: %f , BER original: %f" % (ber, BER))
     return output

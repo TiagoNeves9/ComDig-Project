@@ -3,15 +3,24 @@
 # usando o diagrama apresentado na Figura 1 (b), calcule os seguintes valores de BER:
 
 import random as rand
+
 from AuxFunctions import binarySymmetricChannel, string_para_binario
 
 
+
+
+
 # i) BER1, entre a entrada e a saída do BSC, sem controlo de erros;
-def bscWOErrorsControl(file, ber):
+def bscWOErrorsControl(file, BER):
     with open(file, 'r') as fr:
         data = fr.read()
     data2 = string_para_binario(data)
-    return binarySymmetricChannel(data2, ber)
+
+    bscData = binarySymmetricChannel(data2, BER)
+
+    ber = calculateBER(data2, bscData)
+
+    print("BER obtida: %f , BER original: %f" % (ber, BER))
 
     # a = bscWOErrorsControl('fileA.txt', 0.1)
     # b = bscWOErrorsControl('fileB.txt', 00.1)             #tirar de comentario para testar
@@ -26,16 +35,32 @@ def bscWOErrorsControl(file, ber):
     # print(f'BSC para BER = 10^5', f)
 
     # ii) BER2, após a aplicação de código de repetição (3; 1) sobre o BSC, em modo de correção;
- def  bscW3_1(file, ber):
+def bscW3_1(file, BER):
     with open(file, 'r') as fr:
         data = fr.read()
-    data2 = string_para_binario(data)
-    data3 = binarySymmetricChannel(data2, ber)
-    return repetitionCode31(data3, ber)
+    originalBinary = string_para_binario(data)
+    channeledData = binarySymmetricChannel(originalBinary, BER)
+    encrypted = repetitionCode31(channeledData, BER)
+    decrypeted = detect_errors(encrypted)
 
+    ber = calculateBER(originalBinary, decrypeted)
 
+    print("BER obtida: %f , BER original: %f" % (ber, BER))
+    
 
-    # def bscWErrorControl(file, ber):
+    # iii) BER3, após a aplicação de código de Hamming (7, 4) sobre o BSC, em modo de correção.
+
+def bscWHamming(file, BER):
+    with open(file, 'r') as fr:
+        data = fr.read()
+    originalBinary = string_para_binario(data)
+    channeledData = binarySymmetricChannel(originalBinary, BER)
+    encrypted = Hamming7_4(channeledData, BER)
+    decrypeted = detect_errors(encrypted)
+
+    ber = calculateBER( originalBinary, decrypeted)
+
+    print("BER obtida: %f , BER original: %f" % (ber, BER))
 
 
 def repetitionCode31(data, ber):
@@ -48,12 +73,32 @@ def repetitionCode31(data, ber):
 
     output = ""
     for bit in codigo:
+        
         if rand.random() < ber:  # Introduz erro aleatoriamente com base na taxa de erro de bit
             output += str(1 - int(bit))  # Inverte o bit
         else:
             output += bit
 
-    print(output)
+    return output  
+
+
+def Hamming7_4(data, ber):
+    codigo = ''
+    for bit in data:
+        if bit == '1':
+            codigo += '111'
+        else:
+            codigo += '000'
+
+    output = ""
+    for bit in codigo:
+        
+        if rand.random() < ber:  # Introduz erro aleatoriamente com base na taxa de erro de bit
+            output += str(1 - int(bit))  # Inverte o bit
+        else:
+            output += bit
+
+    return(output)
 
 def detect_errors(data):
     output = ""
@@ -90,3 +135,32 @@ def detect_Hamming(data):
             group_bits[error_pos -1] = 1 - group_bits[error_pos - 1]
         output += "".join(map(str, group_bits[2:]))
     return output
+
+def calculateBER(msg, decrypeted):
+
+    errors = 0
+    for i in range(len(msg)):
+        if int(msg[i], 2) ^ int(decrypeted[i], 2):
+            errors += 1
+    ber = errors / len(msg)
+    return ber
+
+    
+    
+    
+
+def main():
+     berValues =  [0.1, 0.01,0.001,0.0001,0.00001]
+     print("BER, entre a entrada e a saída do BSC, sem controlo de erros:")
+     for ber in berValues:
+        bscWOErrorsControl('2Modulo/Exer1/fileA.txt', ber) 
+
+     print("BER, após a aplicação de código de repetição (3, 1) sobre o BSC, em modo de correção:")
+     for ber in berValues:
+        bscW3_1('2Modulo/Exer1/fileA.txt', ber) 
+
+     print("BER, , após a aplicação de código de Hamming (7, 4) sobre o BSC, em modo de correção:")
+
+
+if __name__ == "__main__":
+    main()
