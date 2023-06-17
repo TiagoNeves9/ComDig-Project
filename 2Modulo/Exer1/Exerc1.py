@@ -18,7 +18,7 @@ def bscWOErrorsControl(file, BER):
 
     bscData = binarySymmetricChannel(data2, BER)
 
-    ber = calculateBER(data2, bscData)
+    ber = calculateBER(string_para_binario(data2), string_para_binario(bscData))
 
     print("BER obtida: %f , BER original: %f" % (ber, BER))
 
@@ -43,7 +43,7 @@ def bscW3_1(file, BER):
     encrypted = repetitionCode31(channeledData, BER)
     decrypeted = detect_errors(encrypted)
 
-    ber = calculateBER(originalBinary, decrypeted)
+    ber = calculateBER((originalBinary), (decrypeted))
 
     print("BER obtida: %f , BER original: %f" % (ber, BER))
     
@@ -56,7 +56,7 @@ def bscWHamming(file, BER):
     originalBinary = string_para_binario(data)
     channeledData = binarySymmetricChannel(originalBinary, BER)
     encrypted = Hamming7_4(channeledData, BER)
-    decrypeted = detect_errors(encrypted)
+    decrypeted = detect_Hamming(encrypted)
 
     ber = calculateBER( originalBinary, decrypeted)
 
@@ -83,22 +83,22 @@ def repetitionCode31(data, ber):
 
 
 def Hamming7_4(data, ber):
-    codigo = ''
-    for bit in data:
-        if bit == '1':
-            codigo += '111'
-        else:
-            codigo += '000'
+    output = ''
+    groups = [data[i:i+4] for i in range(0,len(data), 4)]
 
-    output = ""
-    for bit in codigo:
-        
-        if rand.random() < ber:  # Introduz erro aleatoriamente com base na taxa de erro de bit
-            output += str(1 - int(bit))  # Inverte o bit
-        else:
-            output += bit
+    for group in groups:
+        group_bits = [int(bit) for bit in group]
 
-    return(output)
+        p1 = group_bits[1] ^ group_bits[2] ^ group_bits[3]
+        p2 = group_bits[0] ^ group_bits[1] ^ group_bits[2]
+        p3 = group_bits[0] ^ group_bits[2] ^ group_bits[3]
+
+        output += group + str(p1) + str(p2) + str(p3) 
+    
+    
+
+
+    return output
 
 def detect_errors(data):
     output = ""
@@ -126,11 +126,11 @@ def detect_Hamming(data):
     for group in groups:
         group_bits = [int(bit) for bit in group]
 
-        p1 = group_bits[2] ^ group_bits[4] ^ group_bits[6]
-        p2 = group_bits[2] ^ group_bits[5] ^ group_bits[6]
-        p3 = group_bits[4] ^ group_bits[5] ^ group_bits[6]
+        p1 = group_bits[1] ^ group_bits[2] ^ group_bits[3]
+        p2 = group_bits[0] ^ group_bits[1] ^ group_bits[2]
+        p3 = group_bits[0] ^ group_bits[2] ^ group_bits[3]
 
-        error_pos = p1*1 + p2*2 + p3*4
+        error_pos = p1 + p2 * 2 + p3 * 4
         if error_pos != 0:
             group_bits[error_pos -1] = 1 - group_bits[error_pos - 1]
         output += "".join(map(str, group_bits[2:]))
@@ -160,6 +160,8 @@ def main():
         bscW3_1('2Modulo/Exer1/fileA.txt', ber) 
 
      print("BER, , após a aplicação de código de Hamming (7, 4) sobre o BSC, em modo de correção:")
+     for ber in berValues:
+        bscWHamming('2Modulo/Exer1/fileA.txt', ber) 
 
 
 if __name__ == "__main__":
