@@ -1,7 +1,6 @@
 import random
 import AuxFunctions as aux
 
-
 arduino = aux.arduinoSetup()
 
 
@@ -34,6 +33,7 @@ def introduce_error(data, first_idx, errors):
     data = ''.join(bits_list)
     return data
 
+
 while True:
     if arduino.in_waiting > 0:
         data = arduino.readline().decode().strip()
@@ -45,8 +45,8 @@ while True:
         original_checksum = fletcher_checksum(bits)
 
         # Introduz um erro (inverte um bit aleatório)
-        error_position = 3  # Define a posição do bit a ser invertido
-        errors = random.randint(0, 5)
+        error_position = 3  # Define a posição do bit inicial a ser invertido
+        errors = random.randint(0, 5)  # quantidade de bits que serao invertidos
         bits_alterados = introduce_error(bits, error_position, errors)
         print(f"Dados apos introdução de erros: {bits_alterados}")
 

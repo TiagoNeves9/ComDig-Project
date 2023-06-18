@@ -38,3 +38,36 @@ def binarySymmetricChannel(data, BER):
     #ber = errors / len(data)
     #print("BER obtida: %f , BER original: %f" % (ber, BER))
     return output
+
+def count_diff_symb(str1, str2):
+    count = 0
+    for char1, char2 in zip(str1,str2):
+        if char1 != char2:
+            count +=1
+
+    return count
+
+def calculateBER(msg, decrypeted):
+    errors = 0
+    for i in range(len(msg)):
+        if int(msg[i], 2) ^ int(decrypeted[i], 2):
+            errors += 1
+    ber = errors / len(msg)
+    return ber
+
+
+
+def escrever_tabela(resultados):
+    print()
+    print("**** TABELA DE RESULTADOS ****")
+    print()
+    # Cabeçalho da tabela
+    print("| {:<10} | {:<10} | {:<10} | {:<10} | {:<10} | {:<10} |".format("Ficheiro", "BER Obtida", "BER Original", "nº bits no BSC", "nª simbolos diferentes" ,"Operação"))
+    print("+{:-<12}+{:-<12}+{:-<12}+{:-<12}+{:-<12}+{:-<12}+".format("", "", "", "", "", ""))
+
+    # Linhas de dados
+    for ficheiro, ber1, ber2, dim, diff, func in resultados:
+        print("| {:<10} | {:<10}: | {:<10} | {:<10} | {:<10} | {:<10} |".format(ficheiro, ber1, ber2, dim, diff, func))
+
+    # Rodapé da tabela
+    print("+{:-<12}+{:-<12}+{:-<12}+{:-<12}+{:-<12}+{:-<12}+".format("", "", "", "", "",""))
