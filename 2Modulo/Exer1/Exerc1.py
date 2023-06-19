@@ -114,7 +114,10 @@ def Hamming7_4(data, ber):
         p3 = group_bits[0] ^ group_bits[2] ^ group_bits[3]
 
         output += group + str(p1) + str(p2) + str(p3)
+        
 
+    #aplicação de um fator de erro baseado na BER com o objtico de simular os erros de tranmição possiveis entre
+    # o codificador e o descodificador
     res = ''
     for bit in output:
         if rand.random() < ber:
@@ -131,6 +134,9 @@ def detect_Hamming(data):
     groups = [data[i:i + 7] for i in range(0, len(data), 7)]
     
     for group in groups:
+
+        #calculo do sindroma
+
         group_bits = [int(bit) for bit in group]
 
         s1 = group_bits[4] ^ group_bits[1] ^ group_bits[2] ^ group_bits[3]
@@ -162,8 +168,10 @@ def decoder(sindroma, palavra_codigo):
         return palavra_codigo[0:4]
 
     else:
+        # obtenção do padrao de erro 
         padrao_erro = tabela_sindromas[sindroma]
 
+        # correção da palavra de codigo
         palavra_estimada = ""
         for bit1, bit2 in zip(padrao_erro,palavra_codigo):
     
