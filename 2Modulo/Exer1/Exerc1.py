@@ -102,7 +102,7 @@ def bscWHamming(file, BER):
 
 
 def Hamming7_4(data, ber):
-    dim = len(data)
+   
     output = ''
     groups = [data[i:i + 4] for i in range(0, len(data), 4)]
 
@@ -115,15 +115,21 @@ def Hamming7_4(data, ber):
 
         output += group + str(p1) + str(p2) + str(p3)
 
-    dim_out = len(output)
-    dim_groups = len(groups) * 4
-    return output
+    res = ''
+    for bit in output:
+        if rand.random() < ber:
+            res += '0' if bit == '1' else '1'
+        else:
+            res += bit
+    
+    return res
+
 
 
 def detect_Hamming(data):
     message = ""
     groups = [data[i:i + 7] for i in range(0, len(data), 7)]
-    c = 0
+    
     for group in groups:
         group_bits = [int(bit) for bit in group]
 
@@ -133,7 +139,7 @@ def detect_Hamming(data):
         
         sindroma = str("{}{}{}").format(s1,s2,s3)
 
-        c += 1
+    
         message += decoder(sindroma, group)
 
     return message
@@ -169,7 +175,7 @@ def decoder(sindroma, palavra_codigo):
             
             palavra_estimada += str(bit_result)
 
-        return palavra_estimada[0:3]
+        return palavra_estimada[0:4]
 
        
 
@@ -186,8 +192,8 @@ def main():
         path = os.path.join(diretoria, ficheiro)
         if os.path.isfile(path):
             for ber in berValues:
-                bscWOErrorsControl(path, ber)
-                bscW3_1(path, ber)
+                # bscWOErrorsControl(path, ber)
+                # bscW3_1(path, ber)
                 bscWHamming(path, ber)
                 
     escrever_tabela(resultados)
