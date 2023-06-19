@@ -8,7 +8,8 @@ from AuxFunctions import binarySymmetricChannel, string_para_binario, escrever_t
     count_diff_symb, calculateBER
 
 resultados = []
-diretoria = 'E:\\ISEL_inst\\4ºSemestre22-23\\CD\\CD-G09-2223\\2Modulo\\Exer1\\files'
+diretoria = '2Modulo\\Exer1\\files'
+# 'E:\\ISEL_inst\\4ºSemestre22-23\\CD\\CD-G09-2223\\2Modulo\\Exer1\\files'
 
 
 # i) BER1, entre a entrada e a saída do BSC, sem controlo de erros;
@@ -82,17 +83,26 @@ def detect_errors(data):
 def bscWHamming(file, BER):
     with open(file, 'r') as fr:
         data = fr.read()
+
     originalBinary = string_para_binario(data)
     channeledData = binarySymmetricChannel(originalBinary, BER)
     encrypted = Hamming7_4(channeledData, BER)
-    decrypeted = detect_Hamming(encrypted)
+    decrypted = detect_Hamming(encrypted)
 
-    ber = calculateBER(originalBinary, decrypeted)
+    ber = calculateBER(originalBinary, decrypted)
 
-    print("BER obtida: %f , BER original: %f" % (ber, BER))
+    fileOut = binario_para_string(channeledData)
+
+    diff = count_diff_symb(data, fileOut)
+
+    ber = calculateBER(originalBinary, decrypted)
+    ber = round(ber, 6)
+    resultado = (file.split("\\")[-1], ber, BER, len(originalBinary), diff, "Hamming (7,4)")
+    resultados.append(resultado)
 
 
 def Hamming7_4(data, ber):
+    dim = len(data)
     output = ''
     groups = [data[i:i + 4] for i in range(0, len(data), 4)]
 
@@ -105,41 +115,85 @@ def Hamming7_4(data, ber):
 
         output += group + str(p1) + str(p2) + str(p3)
 
+    dim_out = len(output)
+    dim_groups = len(groups) * 4
     return output
 
 
 def detect_Hamming(data):
-    output = ""
+    message = ""
     groups = [data[i:i + 7] for i in range(0, len(data), 7)]
-
+    c = 0
     for group in groups:
         group_bits = [int(bit) for bit in group]
 
-        p1 = group_bits[1] ^ group_bits[2] ^ group_bits[3]
-        p2 = group_bits[0] ^ group_bits[1] ^ group_bits[2]
-        p3 = group_bits[0] ^ group_bits[2] ^ group_bits[3]
+        s1 = group_bits[4] ^ group_bits[1] ^ group_bits[2] ^ group_bits[3]
+        s2 = group_bits[5] ^ group_bits[0] ^ group_bits[1] ^ group_bits[2]
+        s3 = group_bits[6] ^ group_bits[0] ^ group_bits[2] ^ group_bits[3]
+        
+        sindroma = str("{}{}{}").format(s1,s2,s3)
 
-        error_pos = p1 + p2 * 2 + p3 * 4
-        if error_pos != 0:
-            group_bits[error_pos - 1] = 1 - group_bits[error_pos - 1]
-        output += "".join(map(str, group_bits[2:]))
-    return output
+        c += 1
+        message += decoder(sindroma, group)
+
+    return message
+
+def decoder(sindroma, palavra_codigo):
+
+    tabela_sindromas = {
+        '000': '0000000',
+        '011': '1000000', 
+        '110': '0100000',
+        '101': '0010000',
+        '111': '0001000', 
+        '100': '0000100',
+        '010': '0000010',
+        '001': '0000001',
+        }
+    
+    
+    if sindroma == "000" :
+        return palavra_codigo[0:4]
+
+    else:
+        padrao_erro = tabela_sindromas[sindroma]
+
+        palavra_estimada = ""
+        for bit1, bit2 in zip(padrao_erro,palavra_codigo):
+    
+            int1 = int(bit1)
+            int2 = int(bit2)
+            
+           
+            bit_result = int1 & int2
+            
+            palavra_estimada += str(bit_result)
+
+        return palavra_estimada[0:3]
+
+       
 
 
-bscWHamming('files/fileA.txt', 0.01)
+    
 
-# def main():
-#     berValues = [0.1, 0.01, 0.001, 0.0001, 0.00001]
-#     for ficheiro in os.listdir(diretoria):
-#         path = os.path.join(diretoria, ficheiro)
-#         if os.path.isfile(path):
-#             for ber in berValues:
-#                 bscWOErrorsControl(path, ber)
-#                 bscW3_1(path, ber)
-#     escrever_tabela(resultados)
-#
-#
-#
-#
-# if __name__ == '__main__':
-#     main()
+
+
+
+
+def main():
+    berValues = [0.1, 0.01, 0.001, 0.0001, 0.00001]
+    for ficheiro in os.listdir(diretoria):
+        path = os.path.join(diretoria, ficheiro)
+        if os.path.isfile(path):
+            for ber in berValues:
+                bscWOErrorsControl(path, ber)
+                bscW3_1(path, ber)
+                bscWHamming(path, ber)
+                
+    escrever_tabela(resultados)
+
+
+
+
+if __name__ == '__main__':
+    main()
